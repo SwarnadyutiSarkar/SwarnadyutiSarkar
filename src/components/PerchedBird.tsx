@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useReducedMotion } from 'motion/react';
 
 interface PerchedBirdProps {
   isHovered: boolean;
@@ -15,8 +16,10 @@ export const PerchedBird: React.FC<PerchedBirdProps> = ({
 }) => {
   const [hasTakenFlight, setHasTakenFlight] = useState(false);
   const [isReturning, setIsReturning] = useState(false);
+  const prefersReduced = useReducedMotion();
 
   useEffect(() => {
+    if (prefersReduced) return;
     if (isHovered) {
       setHasTakenFlight(true);
       setIsReturning(false);

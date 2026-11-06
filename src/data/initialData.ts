@@ -16,13 +16,17 @@ export const INITIAL_SETTINGS: PortfolioSettings = {
   openToBadge: 'Open to software engineering, data and development-sector roles · Kolkata, India',
   aboutText:
     'Computer Science graduate with hands-on experience across software engineering and the United Nations system. I build full-stack and data tools (React, Node, Python) for climate, trade and SDG monitoring, and I bring programme coordination, stakeholder engagement and knowledge management experience from UN ESCAP, UNDP, UNOSSC and UNV assignments. Committed to inclusive and sustainable development and women\'s economic empowerment.',
-  photoUrl: '/src/assets/images/swarnadyuti_portrait_1793954580460.jpg',
+  photoUrl: '/src/assets/images/swarnadyuti_portrait.webp',
   techResumeUrl: '',
   devResumeUrl: '',
   email: 'goldenbeauty510@gmail.com',
   linkedinUrl: 'https://linkedin.com/in/swarnadyuti-sarkar-a50889315',
   githubUrl: '',
   spokenLanguages: 'English (Advanced), Hindi (Advanced), Japanese (Beginner, N5)',
+  statProjectsCount: '8',
+  statCountriesTracked: '194',
+  statCaseStudies: '30',
+  statUNEntities: '5',
 };
 
 export const INITIAL_SKILLS: SkillGroup[] = [

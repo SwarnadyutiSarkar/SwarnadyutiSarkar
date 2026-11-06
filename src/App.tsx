@@ -5,6 +5,7 @@
 
 import React, { useEffect, useState } from 'react';
 import { PortfolioProvider } from './context/PortfolioContext';
+import { ModeProvider, usePortfolioMode } from './context/ModeContext';
 import { CurtainIntro } from './components/CurtainIntro';
 import { Navbar } from './components/Navbar';
 import { Hero } from './components/Hero';
@@ -18,10 +19,24 @@ import { Footer } from './components/Footer';
 import { AdminPanel } from './components/AdminPanel';
 import { BorderVines } from './components/BorderVines';
 import { ParallaxButterflies } from './components/ParallaxButterflies';
+import { ScrollProgressStem } from './components/ScrollProgressStem';
 
-export default function App() {
+function PortfolioApp() {
+  const { isGarden } = usePortfolioMode();
+
   const [showIntro, setShowIntro] = useState<boolean>(() => {
     try {
+      // Check if user specified professional mode in URL or localStorage
+      const params = new URLSearchParams(window.location.search);
+      const m = params.get('mode')?.toLowerCase();
+      if (m === 'pro' || m === 'professional') {
+        return false;
+      }
+      const saved = localStorage.getItem('portfolio_mode');
+      if (saved === 'professional') {
+        return false;
+      }
+
       const seen = sessionStorage.getItem('swarnadyuti_intro_seen');
       return seen !== 'true';
     } catch {
@@ -52,9 +67,9 @@ export default function App() {
     return () => window.removeEventListener('hashchange', checkAdminRoute);
   }, []);
 
-  // Lock scroll while intro overlay is active
+  // Lock scroll while intro overlay is active in garden mode
   useEffect(() => {
-    if (showIntro) {
+    if (isGarden && showIntro) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -62,7 +77,7 @@ export default function App() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [showIntro]);
+  }, [isGarden, showIntro]);
 
   const handleIntroComplete = () => {
     try {
@@ -74,25 +89,28 @@ export default function App() {
   };
 
   return (
-    <PortfolioProvider>
+    <>
       {/* Skip to Content for WCAG Accessibility */}
       <a href="#main-content" className="skip-link">
         Skip to main content
       </a>
 
-      {/* 1. Entrance Curtain Reveal: Full-Screen Overlay with Two Birds Opening It */}
-      {showIntro && <CurtainIntro onComplete={handleIntroComplete} />}
+      {/* 1. Entrance Curtain Reveal: Full-Screen Overlay with Two Birds (Garden mode only) */}
+      {isGarden && showIntro && <CurtainIntro onComplete={handleIntroComplete} />}
 
-      {/* 2a. Fixed Left and Right Border Flower Vines with Scroll-Linked Shift */}
-      <BorderVines />
+      {/* 2a. Fixed Left and Right Border Flower Vines with Scroll-Linked Shift (Garden mode only) */}
+      {isGarden && <BorderVines />}
 
-      {/* 2b. Multi-Layered 3D Parallax Floating Butterflies behind text content */}
-      <ParallaxButterflies />
+      {/* 2b. Multi-Layered 3D Parallax Floating Butterflies behind text content (Garden mode only) */}
+      {isGarden && <ParallaxButterflies />}
+
+      {/* 2c. Growing Vine Progress Stem down Left Edge (Garden mode only) */}
+      {isGarden && <ScrollProgressStem />}
 
       {/* Main Website App Shell (z-10 layer for crisp text & controls) */}
       <div
-        className="min-h-screen flex flex-col bg-[#FBF4EF] text-[#2E2230] relative z-10"
-        aria-hidden={showIntro}
+        className="min-h-screen flex flex-col bg-bg text-text relative z-10 transition-colors duration-150"
+        aria-hidden={isGarden && showIntro}
       >
         <Navbar onOpenAdmin={() => setIsAdminOpen(true)} />
 
@@ -106,7 +124,7 @@ export default function App() {
           {/* 3. Skills */}
           <Skills />
 
-          {/* 4. Projects (Garden with Interactive Perched Birds flying away on hover) */}
+          {/* 4. Projects (Garden with Interactive Perched Birds flying away on hover / Pro mode screenshot-first) */}
           <ProjectsGarden />
 
           {/* 5. Experience Timeline */}
@@ -122,7 +140,11 @@ export default function App() {
         {/* 10. Footer with Replay Curtain Reveal trigger */}
         <Footer
           onOpenAdmin={() => setIsAdminOpen(true)}
-          onReplayIntro={() => setShowIntro(true)}
+          onReplayIntro={() => {
+            if (isGarden) {
+              setShowIntro(true);
+            }
+          }}
         />
 
         {/* Discreet Admin Modal with Google Sign-in */}
@@ -136,6 +158,16 @@ export default function App() {
           }}
         />
       </div>
-    </PortfolioProvider>
+    </>
+  );
+}
+
+export default function App() {
+  return (
+    <ModeProvider>
+      <PortfolioProvider>
+        <PortfolioApp />
+      </PortfolioProvider>
+    </ModeProvider>
   );
 }

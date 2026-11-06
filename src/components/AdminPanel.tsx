@@ -1457,6 +1457,61 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({ isOpen, onClose }) => {
                     />
                   </div>
 
+                  {/* About Stats Strip Numbers */}
+                  <div className="p-3 bg-[#FAF0EA] rounded-xl border border-[#E8C5C8]">
+                    <p className="text-xs font-bold text-[#5B2A4A] mb-2">About Section Stats Numbers</p>
+                    <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#5B2A4A] mb-0.5">
+                          Projects Count
+                        </label>
+                        <input
+                          type="text"
+                          value={settingsForm.statProjectsCount || '8'}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, statProjectsCount: e.target.value })}
+                          placeholder="8"
+                          className="w-full px-2.5 py-1.5 text-xs bg-white rounded-lg border border-[#E8C5C8]"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#5B2A4A] mb-0.5">
+                          Countries Tracked
+                        </label>
+                        <input
+                          type="text"
+                          value={settingsForm.statCountriesTracked || '194'}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, statCountriesTracked: e.target.value })}
+                          placeholder="194"
+                          className="w-full px-2.5 py-1.5 text-xs bg-white rounded-lg border border-[#E8C5C8]"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#5B2A4A] mb-0.5">
+                          Case Studies
+                        </label>
+                        <input
+                          type="text"
+                          value={settingsForm.statCaseStudies || '30'}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, statCaseStudies: e.target.value })}
+                          placeholder="30"
+                          className="w-full px-2.5 py-1.5 text-xs bg-white rounded-lg border border-[#E8C5C8]"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[11px] font-semibold text-[#5B2A4A] mb-0.5">
+                          UN Entities
+                        </label>
+                        <input
+                          type="text"
+                          value={settingsForm.statUNEntities || '5'}
+                          onChange={(e) => setSettingsForm({ ...settingsForm, statUNEntities: e.target.value })}
+                          placeholder="5"
+                          className="w-full px-2.5 py-1.5 text-xs bg-white rounded-lg border border-[#E8C5C8]"
+                        />
+                      </div>
+                    </div>
+                  </div>
+
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-xs font-semibold text-[#5B2A4A] mb-1">

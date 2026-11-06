@@ -1,24 +1,72 @@
 @import "tailwindcss";
 
+@theme {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-subtle: var(--surface-subtle);
+  --color-surface-inner: var(--surface-inner);
+  --color-text: var(--text);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-accent-hover: var(--accent-hover);
+  --color-border: var(--border);
+  --color-rose: var(--rose);
+  --color-rose-soft: var(--rose-soft);
+  --color-sage: var(--sage);
+  --color-sage-soft: var(--sage-soft);
+}
+
 @layer base {
-  :root {
-    --bg-cream: #FBF4EF;
-    --text-charcoal: #2E2230;
-    --plum-primary: #5B2A4A;
-    --plum-hover: #48203a;
-    --rose-accent: #D49B9E;
+  /* Garden Mode (Default & Garden theme) */
+  :root,
+  [data-theme="garden"] {
+    --bg: #FBF4EF;
+    --surface: #FAF0EA;
+    --surface-card: #FAF0EA;
+    --surface-subtle: #F5EAE9;
+    --surface-inner: #FBF4EF;
+    --text: #2E2230;
+    --muted: #6B5B6D;
+    --accent: #5B2A4A;
+    --accent-hover: #48203a;
+    --border: #E8C5C8;
+    --rose: #D49B9E;
     --rose-soft: #F5EAE9;
-    --rose-border: #E8C5C8;
-    --sage-accent: #748A6D;
+    --sage: #748A6D;
     --sage-soft: #EFF3ED;
     --finch-blue: #6FA8DC;
     --finch-blue-dark: #3E7CB1;
+    --card-radius: 1.5rem;
+    --badge-radius: 9999px;
+  }
+
+  /* Professional Mode (Clean, sharp, minimal, plum accent only) */
+  [data-theme="professional"] {
+    --bg: #FAFAF9;
+    --surface: #FFFFFF;
+    --surface-card: #FFFFFF;
+    --surface-subtle: #F5F5F4;
+    --surface-inner: #FFFFFF;
+    --text: #1C1917;
+    --muted: #78716C;
+    --accent: #5B2A4A;
+    --accent-hover: #48203a;
+    --border: #E7E5E4;
+    --rose: #5B2A4A;
+    --rose-soft: #F5F5F4;
+    --sage: #5B2A4A;
+    --sage-soft: #F5F5F4;
+    --finch-blue: #5B2A4A;
+    --finch-blue-dark: #48203a;
+    --card-radius: 0.75rem;
+    --badge-radius: 0.5rem;
   }
 
   body {
-    background-color: var(--bg-cream);
-    color: var(--text-charcoal);
+    background-color: var(--bg);
+    color: var(--text);
     font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    transition: background-color 150ms ease, color 150ms ease;
   }
 
   h1, h2, h3, h4, .font-display {
@@ -28,6 +76,18 @@
   .font-script {
     font-family: 'Caveat', cursive;
   }
+
+  [data-theme="professional"] .font-script {
+    font-family: 'Fraunces', Georgia, serif;
+    font-style: italic;
+  }
+}
+
+/* View Transition support for mode toggling */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 200ms;
+  animation-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 /* Reduced motion support */
@@ -40,7 +100,7 @@
   }
 }
 
-/* Butterfly gentle flight animation */
+/* Butterfly gentle flight animation (Garden mode) */
 @keyframes butterfly-float {
   0%, 100% {
     transform: translate(0, 0) rotate(0deg) scale(1);
@@ -120,12 +180,12 @@
   will-change: transform, opacity;
 }
 
-/* Triggered only when the card enters the viewport */
-.is-in-view .lily-bloom-element {
+/* Triggered only when the card enters the viewport in Garden mode */
+[data-theme="garden"] .is-in-view .lily-bloom-element {
   animation: lily-bloom-viewport 1.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
-.is-in-view .lily-bg-bloom {
+[data-theme="garden"] .is-in-view .lily-bg-bloom {
   animation: lily-bg-bloom-viewport 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -134,7 +194,7 @@
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
 }
 
-.group:hover .lily-bloom-target {
+[data-theme="garden"] .group:hover .lily-bloom-target {
   transform: scale(1.1) rotate(4deg);
 }
 
@@ -143,7 +203,7 @@
   position: absolute;
   top: -60px;
   left: 1rem;
-  background: var(--plum-primary);
+  background: var(--accent);
   color: #fff;
   padding: 0.5rem 1rem;
   z-index: 1000;

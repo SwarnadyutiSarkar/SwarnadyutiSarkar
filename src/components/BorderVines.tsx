@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useReducedMotion } from 'motion/react';
 
 /**
  * Decorative SVG flower vines along the fixed left and right screen borders.
@@ -6,8 +7,11 @@ import React, { useEffect, useState } from 'react';
  */
 export const BorderVines: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
+  const prefersReduced = useReducedMotion();
 
   useEffect(() => {
+    if (prefersReduced) return;
+
     let ticking = false;
     const handleScroll = () => {
       if (!ticking) {
@@ -21,13 +25,13 @@ export const BorderVines: React.FC = () => {
 
     window.addEventListener('scroll', handleScroll, { passive: true });
     return () => window.removeEventListener('scroll', handleScroll);
-  }, []);
+  }, [prefersReduced]);
 
-  // Subtle scroll calculations
-  const leftShift = Math.sin(scrollY * 0.003) * 6;
-  const rightShift = Math.cos(scrollY * 0.003) * 6;
-  const verticalShiftLeft = (scrollY * 0.04) % 120;
-  const verticalShiftRight = (scrollY * 0.035) % 120;
+  // Subtle scroll calculations (0 if reduced motion preferred)
+  const leftShift = prefersReduced ? 0 : Math.sin(scrollY * 0.003) * 6;
+  const rightShift = prefersReduced ? 0 : Math.cos(scrollY * 0.003) * 6;
+  const verticalShiftLeft = prefersReduced ? 0 : (scrollY * 0.04) % 120;
+  const verticalShiftRight = prefersReduced ? 0 : (scrollY * 0.035) % 120;
 
   return (
     <>

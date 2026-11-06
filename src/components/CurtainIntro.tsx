@@ -1,4 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
+import { useReducedMotion } from 'motion/react';
 
 // Blue Finch Bird SVG (accent blue #6FA8DC and deep #3E7CB1, cream belly, orange beak)
 const BlueFinch: React.FC<{
@@ -189,10 +190,11 @@ export const CurtainIntro: React.FC<CurtainIntroProps> = ({ onComplete }) => {
     setPetals(generatedPetals);
   }, []);
 
-  // Check prefers-reduced-motion
+  // Check prefers-reduced-motion via motion/react hook and mediaQuery
+  const prefersReduced = useReducedMotion();
   useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-    if (mediaQuery.matches) {
+    const mediaQuery = typeof window !== 'undefined' ? window.matchMedia('(prefers-reduced-motion: reduce)') : null;
+    if (prefersReduced || mediaQuery?.matches) {
       onComplete();
       return;
     }
@@ -203,7 +205,7 @@ export const CurtainIntro: React.FC<CurtainIntroProps> = ({ onComplete }) => {
     }, 1000);
 
     return () => clearTimeout(timer);
-  }, []);
+  }, [prefersReduced]);
 
   // Keyboard support: Space or Enter immediately triggers open, Escape skips
   useEffect(() => {

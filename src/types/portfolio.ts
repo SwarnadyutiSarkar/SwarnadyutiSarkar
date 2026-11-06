@@ -80,4 +80,8 @@ export interface PortfolioSettings {
   linkedinUrl: string;
   githubUrl?: string;
   spokenLanguages: string;
+  statProjectsCount?: string;
+  statCountriesTracked?: string;
+  statCaseStudies?: string;
+  statUNEntities?: string;
 }

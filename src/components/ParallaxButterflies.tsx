@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { useReducedMotion } from 'motion/react';
 import { Butterfly } from './Butterfly';
 
 interface ButterflyConfig {
@@ -73,8 +74,23 @@ const BUTTERFLIES: ButterflyConfig[] = [
 
 export const ParallaxButterflies: React.FC = () => {
   const [scrollY, setScrollY] = useState(0);
+  const [isWideScreen, setIsWideScreen] = useState(() => {
+    return typeof window !== 'undefined' ? window.innerWidth >= 768 : false;
+  });
+  const prefersReduced = useReducedMotion();
+
+  // Track screen width: disable parallax butterflies below 768px
+  useEffect(() => {
+    const handleResize = () => {
+      setIsWideScreen(window.innerWidth >= 768);
+    };
+    window.addEventListener('resize', handleResize, { passive: true });
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
+    if (prefersReduced || !isWideScreen) return;
+
     let ticking = false;
     const onScroll = () => {
       if (!ticking) {
@@ -87,21 +103,25 @@ export const ParallaxButterflies: React.FC = () => {
     };
     window.addEventListener('scroll', onScroll, { passive: true });
     return () => window.removeEventListener('scroll', onScroll);
-  }, []);
+  }, [prefersReduced, isWideScreen]);
+
+  if (!isWideScreen) {
+    return null;
+  }
 
   return (
     <div
       aria-hidden="true"
       className="fixed inset-0 pointer-events-none select-none z-0 overflow-hidden"
-      style={{ perspective: '1000px' }}
+      style={{ perspective: prefersReduced ? 'none' : '1000px' }}
     >
       {BUTTERFLIES.map((b) => {
-        // Multi-layered parallax calculation
-        const offsetY = scrollY * b.speedY;
-        const offsetX = Math.sin((scrollY + b.id * 200) * 0.002) * 25 + scrollY * b.speedX;
-        const tiltX = Math.sin((scrollY + b.id * 100) * 0.003) * 12;
-        const tiltY = Math.cos((scrollY + b.id * 100) * 0.003) * 12;
-        const translateZ = (b.depthLayer - 2) * 40; // -40px (far), 0 (mid), +40px (near)
+        // Multi-layered parallax calculation (suppressed if reduced motion is requested)
+        const offsetY = prefersReduced ? 0 : scrollY * b.speedY;
+        const offsetX = prefersReduced ? 0 : Math.sin((scrollY + b.id * 200) * 0.002) * 25 + scrollY * b.speedX;
+        const tiltX = prefersReduced ? 0 : Math.sin((scrollY + b.id * 100) * 0.003) * 12;
+        const tiltY = prefersReduced ? 0 : Math.cos((scrollY + b.id * 100) * 0.003) * 12;
+        const translateZ = prefersReduced ? 0 : (b.depthLayer - 2) * 40;
 
         return (
           <div
@@ -111,7 +131,9 @@ export const ParallaxButterflies: React.FC = () => {
               left: `${b.baseX}%`,
               top: `${b.baseY}%`,
               opacity: b.opacity,
-              transform: `
+              transform: prefersReduced
+                ? `rotate(${b.baseRotate}deg)`
+                : `
                 translate3d(${offsetX}px, ${offsetY}px, ${translateZ}px)
                 rotate(${b.baseRotate + tiltX * 0.5}deg)
                 rotateX(${tiltX}deg)
@@ -119,7 +141,7 @@ export const ParallaxButterflies: React.FC = () => {
               `,
             }}
           >
-            <Butterfly size={b.size} animated={true} />
+            <Butterfly size={b.size} animated={!prefersReduced} />
           </div>
         );
       })}
