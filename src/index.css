@@ -1,0 +1,156 @@
+@import "tailwindcss";
+
+@layer base {
+  :root {
+    --bg-cream: #FBF4EF;
+    --text-charcoal: #2E2230;
+    --plum-primary: #5B2A4A;
+    --plum-hover: #48203a;
+    --rose-accent: #D49B9E;
+    --rose-soft: #F5EAE9;
+    --rose-border: #E8C5C8;
+    --sage-accent: #748A6D;
+    --sage-soft: #EFF3ED;
+    --finch-blue: #6FA8DC;
+    --finch-blue-dark: #3E7CB1;
+  }
+
+  body {
+    background-color: var(--bg-cream);
+    color: var(--text-charcoal);
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: 'Fraunces', Georgia, serif;
+  }
+
+  .font-script {
+    font-family: 'Caveat', cursive;
+  }
+}
+
+/* Reduced motion support */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Butterfly gentle flight animation */
+@keyframes butterfly-float {
+  0%, 100% {
+    transform: translate(0, 0) rotate(0deg) scale(1);
+  }
+  25% {
+    transform: translate(6px, -10px) rotate(4deg) scale(1.02);
+  }
+  50% {
+    transform: translate(-4px, -18px) rotate(-3deg) scale(0.98);
+  }
+  75% {
+    transform: translate(4px, -8px) rotate(2deg) scale(1.01);
+  }
+}
+
+@keyframes wing-flutter {
+  0%, 100% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(0.4);
+  }
+}
+
+.animate-butterfly {
+  animation: butterfly-float 6s ease-in-out infinite;
+}
+
+.animate-flutter {
+  transform-origin: center;
+  animation: wing-flutter 0.35s ease-in-out infinite;
+}
+
+/* Lily Bloom on Viewport Entry (Keyframes to grow and rotate floral illustrations) */
+@keyframes lily-bloom-viewport {
+  0% {
+    transform: scale(0.86) rotate(-8deg);
+    opacity: 0.45;
+  }
+  60% {
+    transform: scale(1.09) rotate(3.5deg);
+    opacity: 1;
+  }
+  82% {
+    transform: scale(0.98) rotate(-1deg);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
+}
+
+@keyframes lily-bg-bloom-viewport {
+  0% {
+    transform: scale(0.78) rotate(-14deg);
+    opacity: 0.04;
+  }
+  60% {
+    transform: scale(1.12) rotate(4.5deg);
+    opacity: 0.18;
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 0.12;
+  }
+}
+
+/* Base states before entering viewport */
+.lily-bloom-element {
+  transform-origin: center bottom;
+  will-change: transform, opacity;
+}
+
+.lily-bg-bloom {
+  transform-origin: bottom right;
+  will-change: transform, opacity;
+}
+
+/* Triggered only when the card enters the viewport */
+.is-in-view .lily-bloom-element {
+  animation: lily-bloom-viewport 1.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.is-in-view .lily-bg-bloom {
+  animation: lily-bg-bloom-viewport 1.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Hover bloom interaction (preserves interactive flourish on top of viewport bloom) */
+.lily-bloom-target {
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.3s ease;
+}
+
+.group:hover .lily-bloom-target {
+  transform: scale(1.1) rotate(4deg);
+}
+
+/* Skip link */
+.skip-link {
+  position: absolute;
+  top: -60px;
+  left: 1rem;
+  background: var(--plum-primary);
+  color: #fff;
+  padding: 0.5rem 1rem;
+  z-index: 1000;
+  border-radius: 0.5rem;
+  font-weight: 500;
+  transition: top 0.2s ease;
+}
+.skip-link:focus {
+  top: 1rem;
+}

@@ -1,0 +1,147 @@
+{
+  "entities": {
+    "Project": {
+      "title": "Project",
+      "description": "Portfolio project entry with description, links, tags, and lily illustration style.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 150 },
+        "summary": { "type": "string", "maxLength": 400 },
+        "description": { "type": "string", "maxLength": 5000 },
+        "tags": { "type": "array" },
+        "techStack": { "type": "array" },
+        "liveUrl": { "type": "string", "maxLength": 500 },
+        "githubUrl": { "type": "string", "maxLength": 500 },
+        "screenshots": { "type": "array" },
+        "lilyStyle": { "type": "string", "maxLength": 50 },
+        "featured": { "type": "boolean" },
+        "order": { "type": "number" },
+        "createdAt": { "type": "string", "maxLength": 50 },
+        "updatedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["title", "summary", "order"]
+    },
+    "Experience": {
+      "title": "Experience",
+      "description": "Professional or volunteer experience entry.",
+      "type": "object",
+      "properties": {
+        "role": { "type": "string", "maxLength": 150 },
+        "organization": { "type": "string", "maxLength": 150 },
+        "location": { "type": "string", "maxLength": 100 },
+        "startDate": { "type": "string", "maxLength": 50 },
+        "endDate": { "type": "string", "maxLength": 50 },
+        "impactHeadline": { "type": "string", "maxLength": 300 },
+        "bullets": { "type": "array" },
+        "linkUrl": { "type": "string", "maxLength": 500 },
+        "linkText": { "type": "string", "maxLength": 100 },
+        "tags": { "type": "array" },
+        "isVolunteer": { "type": "boolean" },
+        "order": { "type": "number" },
+        "createdAt": { "type": "string", "maxLength": 50 },
+        "updatedAt": { "type": "string", "maxLength": 50 }
+      },
+      "required": ["role", "organization", "order"]
+    },
+    "Education": {
+      "title": "Education",
+      "description": "Academic degree or diploma record.",
+      "type": "object",
+      "properties": {
+        "degree": { "type": "string", "maxLength": 150 },
+        "institution": { "type": "string", "maxLength": 150 },
+        "period": { "type": "string", "maxLength": 50 },
+        "details": { "type": "string", "maxLength": 300 },
+        "order": { "type": "number" }
+      },
+      "required": ["degree", "institution", "order"]
+    },
+    "Certification": {
+      "title": "Certification",
+      "description": "Professional certification record.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 150 },
+        "issuer": { "type": "string", "maxLength": 150 },
+        "year": { "type": "string", "maxLength": 50 },
+        "order": { "type": "number" }
+      },
+      "required": ["title", "order"]
+    },
+    "Achievement": {
+      "title": "Achievement",
+      "description": "Honour, publication, or contest prize record.",
+      "type": "object",
+      "properties": {
+        "title": { "type": "string", "maxLength": 200 },
+        "organization": { "type": "string", "maxLength": 150 },
+        "year": { "type": "string", "maxLength": 50 },
+        "description": { "type": "string", "maxLength": 600 },
+        "order": { "type": "number" }
+      },
+      "required": ["title", "order"]
+    },
+    "SkillGroup": {
+      "title": "SkillGroup",
+      "description": "Grouped skills category.",
+      "type": "object",
+      "properties": {
+        "category": { "type": "string", "maxLength": 100 },
+        "items": { "type": "array" },
+        "order": { "type": "number" }
+      },
+      "required": ["category", "items", "order"]
+    },
+    "Settings": {
+      "title": "Settings",
+      "description": "Global portfolio configuration and profile text.",
+      "type": "object",
+      "properties": {
+        "heroTitle": { "type": "string", "maxLength": 100 },
+        "heroTagline": { "type": "string", "maxLength": 300 },
+        "heroIntro": { "type": "string", "maxLength": 600 },
+        "quote": { "type": "string", "maxLength": 200 },
+        "openToBadge": { "type": "string", "maxLength": 200 },
+        "aboutText": { "type": "string", "maxLength": 2000 },
+        "photoUrl": { "type": "string", "maxLength": 1000 },
+        "techResumeUrl": { "type": "string", "maxLength": 1000 },
+        "devResumeUrl": { "type": "string", "maxLength": 1000 },
+        "email": { "type": "string", "maxLength": 150 },
+        "linkedinUrl": { "type": "string", "maxLength": 500 },
+        "githubUrl": { "type": "string", "maxLength": 500 },
+        "spokenLanguages": { "type": "string", "maxLength": 300 },
+        "updatedAt": { "type": "string", "maxLength": 50 }
+      }
+    }
+  },
+  "firestore": {
+    "/projects/{projectId}": {
+      "schema": "Project",
+      "description": "Portfolio projects collection"
+    },
+    "/experience/{experienceId}": {
+      "schema": "Experience",
+      "description": "Career and volunteer experiences"
+    },
+    "/education/{educationId}": {
+      "schema": "Education",
+      "description": "Academic qualifications"
+    },
+    "/certifications/{certificationId}": {
+      "schema": "Certification",
+      "description": "Professional certifications"
+    },
+    "/achievements/{achievementId}": {
+      "schema": "Achievement",
+      "description": "Honours and publications"
+    },
+    "/skills/{skillId}": {
+      "schema": "SkillGroup",
+      "description": "Categorised skill clusters"
+    },
+    "/settings/{settingId}": {
+      "schema": "Settings",
+      "description": "Site-wide configuration and bio content"
+    }
+  }
+}

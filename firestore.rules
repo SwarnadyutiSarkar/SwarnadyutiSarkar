@@ -1,0 +1,66 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global safety net - default deny all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper functions
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function isOwner() {
+      return request.auth != null &&
+        request.auth.token.email == 'goldenbeauty510@gmail.com' &&
+        request.auth.token.email_verified == true;
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    // 1. Projects collection
+    match /projects/{projectId} {
+      allow read: if true;
+      allow write: if isValidId(projectId) && isOwner();
+    }
+
+    // 2. Experience collection
+    match /experience/{experienceId} {
+      allow read: if true;
+      allow write: if isValidId(experienceId) && isOwner();
+    }
+
+    // 3. Education collection
+    match /education/{educationId} {
+      allow read: if true;
+      allow write: if isValidId(educationId) && isOwner();
+    }
+
+    // 4. Certifications collection
+    match /certifications/{certificationId} {
+      allow read: if true;
+      allow write: if isValidId(certificationId) && isOwner();
+    }
+
+    // 5. Achievements collection
+    match /achievements/{achievementId} {
+      allow read: if true;
+      allow write: if isValidId(achievementId) && isOwner();
+    }
+
+    // 6. Skills collection
+    match /skills/{skillId} {
+      allow read: if true;
+      allow write: if isValidId(skillId) && isOwner();
+    }
+
+    // 7. Settings collection
+    match /settings/{settingId} {
+      allow read: if true;
+      allow write: if isValidId(settingId) && isOwner();
+    }
+  }
+}
