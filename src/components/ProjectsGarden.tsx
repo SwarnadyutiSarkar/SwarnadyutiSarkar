@@ -262,7 +262,7 @@ const ProjectCard: React.FC<ProjectCardProps> = ({
 
 export const ProjectsGarden: React.FC = () => {
   const { projects } = usePortfolio();
-  const { isGarden } = usePortfolioMode();
+  const { isGarden, setIsDetailModalOpen } = usePortfolioMode();
   const prefersReduced = useReducedMotion();
   const [selectedCategory, setSelectedCategory] = useState<ProjectCategory>('All');
   const [activeModalProject, setActiveModalProject] = useState<Project | null>(null);
@@ -274,8 +274,9 @@ export const ProjectsGarden: React.FC = () => {
     return project.tags.includes(selectedCategory);
   });
 
-  // ESC key closes the detail modal
+  // ESC key closes the detail modal & syncs modal open state with ModeContext
   useEffect(() => {
+    setIsDetailModalOpen(Boolean(activeModalProject));
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key === 'Escape') {
         setActiveModalProject(null);
@@ -290,8 +291,9 @@ export const ProjectsGarden: React.FC = () => {
     return () => {
       window.removeEventListener('keydown', handleKeyDown);
       document.body.style.overflow = '';
+      setIsDetailModalOpen(false);
     };
-  }, [activeModalProject]);
+  }, [activeModalProject, setIsDetailModalOpen]);
 
   const containerVariants: Variants = {
     hidden: { opacity: 0 },

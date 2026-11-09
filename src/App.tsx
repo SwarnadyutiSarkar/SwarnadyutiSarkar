@@ -3,7 +3,7 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import { PortfolioProvider } from './context/PortfolioContext';
 import { ModeProvider, usePortfolioMode } from './context/ModeContext';
 import { CurtainIntro } from './components/CurtainIntro';
@@ -22,29 +22,14 @@ import { ParallaxButterflies } from './components/ParallaxButterflies';
 import { ScrollProgressStem } from './components/ScrollProgressStem';
 
 function PortfolioApp() {
-  const { isGarden } = usePortfolioMode();
-
-  const [showIntro, setShowIntro] = useState<boolean>(() => {
-    try {
-      // Check if user specified professional mode in URL or localStorage
-      const params = new URLSearchParams(window.location.search);
-      const m = params.get('mode')?.toLowerCase();
-      if (m === 'pro' || m === 'professional') {
-        return false;
-      }
-      const saved = localStorage.getItem('portfolio_mode');
-      if (saved === 'professional') {
-        return false;
-      }
-
-      const seen = sessionStorage.getItem('swarnadyuti_intro_seen');
-      return seen !== 'true';
-    } catch {
-      return false;
-    }
-  });
-
-  const [isAdminOpen, setIsAdminOpen] = useState<boolean>(false);
+  const {
+    isGarden,
+    showCurtain,
+    dismissCurtain,
+    triggerCurtain,
+    isAdminOpen,
+    setIsAdminOpen,
+  } = usePortfolioMode();
 
   // Check URL hash or query for admin route
   useEffect(() => {
@@ -65,11 +50,11 @@ function PortfolioApp() {
     checkAdminRoute();
     window.addEventListener('hashchange', checkAdminRoute);
     return () => window.removeEventListener('hashchange', checkAdminRoute);
-  }, []);
+  }, [setIsAdminOpen]);
 
-  // Lock scroll while intro overlay is active in garden mode
+  // Lock scroll while intro curtain overlay is active
   useEffect(() => {
-    if (isGarden && showIntro) {
+    if (showCurtain) {
       document.body.style.overflow = 'hidden';
     } else {
       document.body.style.overflow = '';
@@ -77,16 +62,7 @@ function PortfolioApp() {
     return () => {
       document.body.style.overflow = '';
     };
-  }, [isGarden, showIntro]);
-
-  const handleIntroComplete = () => {
-    try {
-      sessionStorage.setItem('swarnadyuti_intro_seen', 'true');
-    } catch (e) {
-      console.warn('sessionStorage unavailable', e);
-    }
-    setShowIntro(false);
-  };
+  }, [showCurtain]);
 
   return (
     <>
@@ -95,13 +71,13 @@ function PortfolioApp() {
         Skip to main content
       </a>
 
-      {/* 1. Entrance Curtain Reveal: Full-Screen Overlay with Two Birds (Garden mode only) */}
-      {isGarden && showIntro && <CurtainIntro onComplete={handleIntroComplete} />}
+      {/* 1. Entrance Curtain Reveal: Finches pulling flowery curtain when switching to Garden mode */}
+      {showCurtain && <CurtainIntro onComplete={dismissCurtain} />}
 
-      {/* 2a. Fixed Left and Right Border Flower Vines with Scroll-Linked Shift (Garden mode only) */}
+      {/* 2a. Fixed Left and Right Border Flower Vines (Garden mode only) */}
       {isGarden && <BorderVines />}
 
-      {/* 2b. Multi-Layered 3D Parallax Floating Butterflies behind text content (Garden mode only) */}
+      {/* 2b. Multi-Layered 3D Parallax Floating Butterflies (Garden mode only) */}
       {isGarden && <ParallaxButterflies />}
 
       {/* 2c. Growing Vine Progress Stem down Left Edge (Garden mode only) */}
@@ -110,7 +86,7 @@ function PortfolioApp() {
       {/* Main Website App Shell (z-10 layer for crisp text & controls) */}
       <div
         className="min-h-screen flex flex-col bg-bg text-text relative z-10 transition-colors duration-150"
-        aria-hidden={isGarden && showIntro}
+        aria-hidden={showCurtain}
       >
         <Navbar onOpenAdmin={() => setIsAdminOpen(true)} />
 
@@ -124,7 +100,7 @@ function PortfolioApp() {
           {/* 3. Skills */}
           <Skills />
 
-          {/* 4. Projects (Garden with Interactive Perched Birds flying away on hover / Pro mode screenshot-first) */}
+          {/* 4. Projects */}
           <ProjectsGarden />
 
           {/* 5. Experience Timeline */}
@@ -137,12 +113,12 @@ function PortfolioApp() {
           <ContactCard />
         </main>
 
-        {/* 10. Footer with Replay Curtain Reveal trigger */}
+        {/* 10. Footer with Replay Curtain Reveal trigger in Garden mode */}
         <Footer
           onOpenAdmin={() => setIsAdminOpen(true)}
           onReplayIntro={() => {
             if (isGarden) {
-              setShowIntro(true);
+              triggerCurtain();
             }
           }}
         />
