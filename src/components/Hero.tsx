@@ -12,12 +12,93 @@ import { usePortfolioMode } from '../context/ModeContext';
 import { Butterfly } from './Butterfly';
 import { BloomingLily, LilyCornerSprig, WaterLily } from './Lilies';
 import { ArrowDown, Download, Mail } from 'lucide-react';
+import { SkylineHero } from './SkylineScene';
 
 const ROTATING_ROLES = [
   'Software engineer',
   'Data builder',
   'Development professional',
 ];
+
+/**
+ * Accessible monospace typed code touch line for Professional Mode.
+ * Types: const focus = ["software", "data", "policy"]; over ~2s.
+ */
+const HeroCodeTouch: React.FC = () => {
+  const fullText = 'const focus = ["software", "data", "policy"];';
+  const prefersReduced = useReducedMotion();
+  const [charCount, setCharCount] = useState(prefersReduced ? fullText.length : 0);
+  const [isDone, setIsDone] = useState(prefersReduced);
+
+  useEffect(() => {
+    if (prefersReduced) {
+      setCharCount(fullText.length);
+      setIsDone(true);
+      return;
+    }
+
+    let current = 0;
+    const startTimer = setTimeout(() => {
+      const interval = setInterval(() => {
+        current += 1;
+        setCharCount(current);
+        if (current >= fullText.length) {
+          clearInterval(interval);
+          setIsDone(true);
+        }
+      }, 44);
+
+      return () => clearInterval(interval);
+    }, 750);
+
+    return () => clearTimeout(startTimer);
+  }, [prefersReduced]);
+
+  const displayedSlice = fullText.slice(0, charCount);
+
+  return (
+    <div
+      role="region"
+      aria-label='const focus = ["software", "data", "policy"];'
+      className="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-surface/90 backdrop-blur-xs border border-border shadow-2xs font-mono text-xs sm:text-[13px] select-none text-text"
+    >
+      <span className="text-muted/70 mr-1 select-none font-bold">$</span>
+      <span className="font-mono">
+        <span className="text-primary font-semibold">{displayedSlice.slice(0, 5)}</span>
+        {displayedSlice.length > 5 && (
+          <span className="text-text font-medium">{displayedSlice.slice(5, 12)}</span>
+        )}
+        {displayedSlice.length > 12 && (
+          <span className="text-muted">{displayedSlice.slice(12, 15)}</span>
+        )}
+        {displayedSlice.length > 15 && (
+          <span className="text-primary font-medium">{displayedSlice.slice(15, 25)}</span>
+        )}
+        {displayedSlice.length > 25 && (
+          <span className="text-muted">{displayedSlice.slice(25, 27)}</span>
+        )}
+        {displayedSlice.length > 27 && (
+          <span className="text-primary font-medium">{displayedSlice.slice(27, 33)}</span>
+        )}
+        {displayedSlice.length > 33 && (
+          <span className="text-muted">{displayedSlice.slice(33, 35)}</span>
+        )}
+        {displayedSlice.length > 35 && (
+          <span className="text-primary font-medium">{displayedSlice.slice(35, 43)}</span>
+        )}
+        {displayedSlice.length > 43 && (
+          <span className="text-muted">{displayedSlice.slice(43)}</span>
+        )}
+      </span>
+      <span
+        aria-hidden="true"
+        className={`inline-block w-1.5 h-3.5 bg-primary ml-0.5 ${
+          isDone ? 'animate-pulse' : 'opacity-100'
+        }`}
+      />
+    </div>
+  );
+};
 
 export const Hero: React.FC = () => {
   const { settings } = usePortfolio();
@@ -95,6 +176,9 @@ export const Hero: React.FC = () => {
         </>
       )}
 
+      {/* Professional Mode: Animated 3-Layer Parallax Skyline Hero Scene with Airplane */}
+      {isProfessional && <SkylineHero />}
+
       <div className="max-w-6xl mx-auto px-4 sm:px-6 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-8 items-center">
           
@@ -169,6 +253,13 @@ export const Hero: React.FC = () => {
             >
               "{settings.heroTagline}"
             </motion.p>
+
+            {/* Professional Mode Code Touch: Monospace typed line under tagline */}
+            {isProfessional && (
+              <motion.div variants={lineVariants} className="pt-0.5 pb-0.5">
+                <HeroCodeTouch />
+              </motion.div>
+            )}
 
             {/* Line 6: Intro paragraph */}
             <motion.p

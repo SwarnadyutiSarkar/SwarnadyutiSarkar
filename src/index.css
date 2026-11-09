@@ -2,62 +2,94 @@
 
 @theme {
   --color-bg: var(--bg);
+  --color-bg-gradient-end: var(--bg-gradient-end);
   --color-surface: var(--surface);
-  --color-surface-subtle: var(--surface-subtle);
-  --color-surface-inner: var(--surface-inner);
+  --color-surface-soft: var(--surface-soft);
+  --color-surface-subtle: var(--surface-soft);
+  --color-surface-inner: var(--surface);
   --color-text: var(--text);
   --color-muted: var(--muted);
-  --color-accent: var(--accent);
-  --color-accent-hover: var(--accent-hover);
+  --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
+  --color-on-primary: var(--on-primary);
+  --color-accent: var(--primary);
+  --color-accent-hover: var(--primary-hover);
+  --color-accent-1: var(--accent-1);
+  --color-accent-2: var(--accent-2);
+  --color-accent-3: var(--accent-3);
+  --color-tag-bg: var(--tag-bg);
+  --color-tag-text: var(--tag-text);
   --color-border: var(--border);
-  --color-rose: var(--rose);
-  --color-rose-soft: var(--rose-soft);
-  --color-sage: var(--sage);
-  --color-sage-soft: var(--sage-soft);
+  --color-footer-bg: var(--footer-bg);
+  --color-footer-text: var(--footer-text);
+  --color-rose: var(--accent-1);
+  --color-rose-soft: var(--surface-soft);
+  --color-sage: var(--accent-3);
+  --color-sage-soft: var(--surface-soft);
 }
 
 @layer base {
   /* Garden Mode (Default & Garden theme) */
   :root,
   [data-theme="garden"] {
-    --bg: #FBF4EF;
-    --surface: #FAF0EA;
-    --surface-card: #FAF0EA;
-    --surface-subtle: #F5EAE9;
-    --surface-inner: #FBF4EF;
-    --text: #2E2230;
-    --muted: #6B5B6D;
-    --accent: #5B2A4A;
-    --accent-hover: #48203a;
-    --border: #E8C5C8;
-    --rose: #D49B9E;
-    --rose-soft: #F5EAE9;
-    --sage: #748A6D;
-    --sage-soft: #EFF3ED;
-    --finch-blue: #6FA8DC;
-    --finch-blue-dark: #3E7CB1;
+    --bg: #EBE8E7;
+    --bg-gradient-end: #F1EAF8;
+    --surface: #F8F6F5;
+    --surface-card: #F8F6F5;
+    --surface-soft: #F3EDF9;
+    --surface-subtle: #F3EDF9;
+    --surface-inner: #F8F6F5;
+    --text: #2D2A45;
+    --muted: #5E5A78;
+    --primary: #6461A8;
+    --primary-hover: #4F4C8A;
+    --on-primary: #FFFFFF;
+    --accent: #6461A8;
+    --accent-hover: #4F4C8A;
+    --accent-1: #EA7186;
+    --accent-2: #F2C76E;
+    --accent-3: #BD9DEA;
+    --tag-bg: #E9DFF6;
+    --tag-text: #3F3B73;
+    --border: rgba(189, 157, 234, 0.5);
+    --footer-bg: #4F4C8A;
+    --footer-text: #FFFFFF;
+    --rose: #EA7186;
+    --rose-soft: #F3EDF9;
+    --sage: #BD9DEA;
+    --sage-soft: #F3EDF9;
     --card-radius: 1.5rem;
     --badge-radius: 9999px;
   }
 
-  /* Professional Mode (Clean, sharp, minimal, plum accent only) */
+  /* Professional Mode (Ice Cold, Freeze Purple, Medium Purple, Purple Pain, Heavy Purple) */
   [data-theme="professional"] {
-    --bg: #FAFAF9;
+    --bg: #E5EAF5;
+    --bg-gradient-end: #D5E7F3;
     --surface: #FFFFFF;
     --surface-card: #FFFFFF;
-    --surface-subtle: #F5F5F4;
+    --surface-soft: #F3EFFB;
+    --surface-subtle: #F3EFFB;
     --surface-inner: #FFFFFF;
-    --text: #1C1917;
-    --muted: #78716C;
-    --accent: #5B2A4A;
-    --accent-hover: #48203a;
-    --border: #E7E5E4;
-    --rose: #5B2A4A;
-    --rose-soft: #F5F5F4;
-    --sage: #5B2A4A;
-    --sage-soft: #F5F5F4;
-    --finch-blue: #5B2A4A;
-    --finch-blue-dark: #48203a;
+    --text: #2A2140;
+    --muted: #5C5470;
+    --primary: #8458B3;
+    --primary-hover: #6E479A;
+    --on-primary: #FFFFFF;
+    --accent: #8458B3;
+    --accent-hover: #6E479A;
+    --accent-1: #A0D2EB;
+    --accent-2: #D0BDF4;
+    --accent-3: #A28089;
+    --tag-bg: #EDE5FA;
+    --tag-text: #4A2F73;
+    --border: rgba(208, 189, 244, 0.6);
+    --footer-bg: #2A2140;
+    --footer-text: #E5EAF5;
+    --rose: #A0D2EB;
+    --rose-soft: #F3EFFB;
+    --sage: #A28089;
+    --sage-soft: #F3EFFB;
     --card-radius: 0.75rem;
     --badge-radius: 0.5rem;
   }

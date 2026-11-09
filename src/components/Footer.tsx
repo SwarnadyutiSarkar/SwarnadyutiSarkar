@@ -5,6 +5,7 @@ import { usePortfolio } from '../context/PortfolioContext';
 import { usePortfolioMode } from '../context/ModeContext';
 import { useReducedMotion } from 'motion/react';
 import { Sparkles } from 'lucide-react';
+import { SkylineSilhouette } from './SkylineScene';
 
 interface FooterProps {
   onOpenAdmin: () => void;
@@ -13,11 +14,19 @@ interface FooterProps {
 
 export const Footer: React.FC<FooterProps> = ({ onOpenAdmin, onReplayIntro }) => {
   const { settings, isAdmin } = usePortfolio();
-  const { isGarden } = usePortfolioMode();
+  const { isGarden, isProfessional } = usePortfolioMode();
   const prefersReduced = useReducedMotion();
 
   return (
-    <footer className="bg-accent text-white py-12 px-4 sm:px-6 relative overflow-hidden z-10">
+    <footer className="bg-footer-bg text-footer-text relative z-10">
+      {/* Professional Mode: Static near-layer skyline silhouette divider above footer */}
+      {isProfessional && (
+        <div className="w-full text-footer-bg -mt-8 sm:-mt-12 md:-mt-16 pointer-events-none select-none overflow-hidden relative z-0">
+          <SkylineSilhouette className="w-full h-8 sm:h-12 md:h-16 block" />
+        </div>
+      )}
+
+      <div className="py-12 px-4 sm:px-6 relative overflow-hidden">
       <div className="max-w-6xl mx-auto flex flex-col md:flex-row items-center justify-between gap-6 text-center md:text-left">
         
         {/* Brand Lockup */}
@@ -83,6 +92,7 @@ export const Footer: React.FC<FooterProps> = ({ onOpenAdmin, onReplayIntro }) =>
         </div>
 
       </div>
-    </footer>
+    </div>
+  </footer>
   );
 };
